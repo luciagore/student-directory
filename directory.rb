@@ -6,11 +6,11 @@ def input_students
   puts "To finish, just hit return twice".center(50)
 
   puts "Name: ".center(50)
-  name = STDIN.gets.chomp
+  name = STDIN.gets.delete("\n")
   puts "Hobby: ".center(50)
-  hobby = STDIN.gets.chomp
+  hobby = STDIN.gets.delete("\n")
   puts "Cohort: ".center(50)
-  cohort = STDIN.gets.chomp
+  cohort = STDIN.gets.delete("\n")
 
   while !name.empty? do
     cohort = 'n/a' if cohort.empty?
@@ -18,12 +18,7 @@ def input_students
     push_students(name, hobby, cohort)
     puts "Now we have #{@students.count} student".center(50) if @students.count == 1
     puts "Now we have #{@students.count} students".center(50) if @students.count > 1
-    puts "Name: ".center(50)
-    name = STDIN.gets.chomp
-    puts "Hobby: ".center(50)
-    hobby = STDIN.gets.chomp
-    puts "Cohort: ".center(50)
-    cohort = STDIN.gets.chomp
+   name = STDIN.gets.chomp
   end
 end
 
@@ -34,7 +29,7 @@ end
 def interactive_menu
   loop do
     print_menu
-    process(STDIN.gets.chomp)
+    process(STDIN.gets.delete("\n"))
   end
 end
 
@@ -75,19 +70,16 @@ def print_header
 end
 
 def print_student_list
-  puts "enter first letter to filter by".center(50)
-  l = gets.chomp
   i = 0
   while i < @students.length
-    if @students[i][:name][0] == l
-      puts "#{i.next}. #{@students[i][:name]} (hobby is #{@students[i][:hobby]})(#{@students[i][:cohort]} cohort)".center(50)
-    end
+    puts "#{i.next}. #{@students[i][:name]} (hobby is #{@students[i][:hobby]})(#{@students[i][:cohort]} cohort)".center(50)
     i +=1
-   end
+  end
  end
 
 def print_footer
-  puts "Overall, we have #{@students.count} great students".center(50)
+  puts "Now we have #{@students.count} student".center(50) if @students.count == 1
+  puts "Now we have #{@students.count} students".center(50) if @students.count > 1
 end
 
 def save_students
