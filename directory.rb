@@ -55,10 +55,16 @@ def print_header
 end
 
 def print_student_list
-  @students.to_enum.with_index(1).each do |student, i|
-    puts "#{i}. #{student[:name]} (#{student[:cohort]} cohort)"
-  end
-end
+  puts "enter first letter to filter by"
+  l = gets.chomp
+  i = 0
+  while i < @students.length
+    if @students[i][:name][0] == l
+      puts "#{i.next}. #{@students[i][:name]} (#{@students[i][:cohort]} cohort)"
+    end
+    i +=1
+   end
+ end
 
 def print_footer
   puts "Overall, we have #{@students.count} great students"
