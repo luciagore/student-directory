@@ -55,8 +55,8 @@ def print_header
 end
 
 def print_student_list
-  @students.each do |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+  @students.to_enum.with_index(1).each do |student, i|
+    puts "#{i}. #{student[:name]} (#{student[:cohort]} cohort)"
   end
 end
 
