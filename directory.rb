@@ -1,3 +1,4 @@
+require 'csv'
 @students = []
 
 def input_students
@@ -15,7 +16,7 @@ def input_students
   while !name.empty? do
     cohort = 'n/a' if cohort.empty?
     hobby = 'n/a' if hobby.empty?
-    push_students(name, hobby, cohort)
+    add_students(name, hobby, cohort)
     puts "Now we have #{@students.count} student".center(50) if @students.count == 1
     puts "Now we have #{@students.count} students".center(50) if @students.count > 1
     puts "Name: ".center(50)
@@ -29,7 +30,7 @@ def input_students
   end
 end
 
-def push_students(name, hobby, cohort)
+def add_students(name, hobby, cohort)
   @students << {name: name, hobby: hobby, cohort: cohort.to_sym}
 end
 
@@ -43,7 +44,7 @@ end
 def print_menu
   puts "1. Input the students".center(50)
   puts "2. Show the students".center(50)
-  puts "3. Save the list to students.csv".center(50)
+  puts "3. Save the list to file".center(50)
   puts "4. Load the list from students.csv".center(50)
   puts "9. Exit".center(50) # 9 because we'll be adding more items
 end
@@ -63,8 +64,9 @@ def process(selection)
     puts "You've selected to show the current students".center(50)
     show_students
   when "3"
-    puts "You've selected to save the list of students to file".center(50)
-    save_students
+    puts "whats the file name?".center(50)
+    filename = STDIN.gets.chomp
+    save_students(filename)
   when "4"
     puts "You've selected to load the current students in 'students.csv'".center(50)
     load_students
@@ -97,27 +99,18 @@ def print_footer
   puts "Now we have #{@students.count} students".center(50) if @students.count > 1
 end
 
-def save_students
-  puts "please write the name of the file you'd like to save to"
-  name_of_file = gets.chomp
-  file = File.open(name_of_file, "w")
-  # iterate over the array of students
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
-  end
-  file.close
-  puts "saved!"
+def save_students(filename = 'students.csv')
+  CSV.open(filename, "w") do |file|
+      @students.each do |student|
+        file << [student[:name], student[:cohort], student[:hobby]]
+      end
+    end
 end
 
-def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-  name, cohort, hobby = line.chomp.split(',')
-  push_students(name, hobby, cohort)
+def load_students(filename = 'students.csv')
+  CSV.foreach(filename, headers: false) do |row|
+    add_students(row[0], row[1], row[2])
   end
-  file.close
 end
 
 def try_load_students
