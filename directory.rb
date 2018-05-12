@@ -63,7 +63,7 @@ def process(selection)
     puts "You've selected to show the current students".center(50)
     show_students
   when "3"
-    puts "You've selected to save the list of students to file 'students.csv'".center(50)
+    puts "You've selected to save the list of students to file".center(50)
     save_students
   when "4"
     puts "You've selected to load the current students in 'students.csv'".center(50)
@@ -98,7 +98,9 @@ def print_footer
 end
 
 def save_students
-  file = File.open("students.csv", "w")
+  puts "please write the name of the file you'd like to save to"
+  name_of_file = gets.chomp
+  file = File.open(name_of_file, "w")
   # iterate over the array of students
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
