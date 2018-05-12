@@ -18,7 +18,14 @@ def input_students
     push_students(name, hobby, cohort)
     puts "Now we have #{@students.count} student".center(50) if @students.count == 1
     puts "Now we have #{@students.count} students".center(50) if @students.count > 1
-   name = STDIN.gets.chomp
+    puts "Name: ".center(50)
+    name = STDIN.gets.delete("\n")
+    if !name.empty?
+      puts "Hobby: ".center(50)
+      hobby = STDIN.gets.delete("\n")
+      puts "Cohort: ".center(50)
+      cohort = STDIN.gets.delete("\n")
+    end
   end
 end
 
@@ -50,14 +57,19 @@ end
 def process(selection)
   case selection
   when "1"
+    puts "You've selected to input new students".center(50)
     input_students
   when "2"
+    puts "You've selected to show the current students".center(50)
     show_students
   when "3"
+    puts "You've selected to save the list of students to file 'students.csv'".center(50)
     save_students
   when "4"
+    puts "You've selected to load the current students in 'students.csv'".center(50)
     load_students
   when "9"
+    puts "You've selected to exit the program.".center(50)
     exit # this will cause the program to terminate
   else
     puts "I don't know what you meant, try again".center(50)
@@ -70,12 +82,15 @@ def print_header
 end
 
 def print_student_list
-  i = 0
-  while i < @students.length
-    puts "#{i.next}. #{@students[i][:name]} (hobby is #{@students[i][:hobby]})(#{@students[i][:cohort]} cohort)".center(50)
-    i +=1
+  if @students.length > 0
+     @students.group_by{|student| student[:cohort]}.map do |month, students|
+       puts "#{month}".center(50)
+       students.map{|student| puts "#{student[:name]}, hobby is #{student[:hobby]}".center(50)}
+     end
+  else
+    puts "There are no students"
   end
- end
+end
 
 def print_footer
   puts "Now we have #{@students.count} student".center(50) if @students.count == 1
